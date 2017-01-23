@@ -1,5 +1,13 @@
 require_relative 'environment'
-connection = PG.connect(ENV['PG_URL'])
+
+begin
+  connection = PG.connect(ENV['PG_URL'])
+rescue PG::ConnectionBad => e
+  puts e.inspect
+  sleep 1
+  retry
+end
+
 enable :run
 
 get '/' do
